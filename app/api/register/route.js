@@ -24,7 +24,7 @@ export async function POST(request) {
     }
 
     // Connect to MongoDB
-    const client = await clientPromise.conn;
+    const client = await clientPromise;   // ✅ fixed
     const db = client.db('itl-conference');
     const registrationsCollection = db.collection('registrations');
 
@@ -61,4 +61,3 @@ export async function POST(request) {
     );
   }
 }
-
