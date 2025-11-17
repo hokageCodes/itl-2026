@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
+import clientPromise from '@/lib/mongodb';
 
 export async function POST(request) {
   try {
@@ -24,7 +24,8 @@ export async function POST(request) {
     }
 
     // Connect to MongoDB
-    const { db } = await connectToDatabase();
+    const client = await clientPromise.conn;
+    const db = client.db('itl-conference');
     const registrationsCollection = db.collection('registrations');
 
     // Check if email already exists
