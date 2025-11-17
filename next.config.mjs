@@ -9,7 +9,17 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'cdn.vectorstock.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'api.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pngimg.com',
         pathname: '/**',
       },
     ],
