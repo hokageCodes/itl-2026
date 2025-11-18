@@ -24,7 +24,7 @@ export async function POST(request) {
     }
 
     // Connect to MongoDB
-    const client = await clientPromise;   // ✅ fixed
+    const client = await clientPromise.conn;
     const db = client.db('itl-conference');
     const registrationsCollection = db.collection('registrations');
 

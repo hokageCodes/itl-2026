@@ -4,10 +4,10 @@ import clientPromise from '@/lib/mongodb';
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, email, phone, company, message } = body;
+    const { organizationName, email, phone, location, sponsorshipLevel, message } = body;
 
     // Validate required fields
-    if (!name || !email || !phone || !company) {
+    if (!organizationName || !email || !phone || !location || !sponsorshipLevel) {
       return NextResponse.json(
         { error: 'All required fields must be filled' },
         { status: 400 }
@@ -19,6 +19,15 @@ export async function POST(req) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
+        { status: 400 }
+      );
+    }
+
+    // Validate phone format
+    const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+    if (!phoneRegex.test(phone) || phone.replace(/\D/g, '').length < 10) {
+      return NextResponse.json(
+        { error: 'Invalid phone number format' },
         { status: 400 }
       );
     }
@@ -37,10 +46,11 @@ export async function POST(req) {
 
     // Create sponsor document
     const sponsor = {
-      name,
+      organizationName,
       email,
       phone,
-      company,
+      location,
+      sponsorshipLevel,
       message: message || '',
       createdAt: new Date(),
       status: 'pending', // pending, contacted, approved, rejected

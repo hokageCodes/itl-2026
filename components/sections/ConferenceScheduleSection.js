@@ -20,7 +20,18 @@ export default function ConferenceScheduleSection() {
   // Conference schedule
   const schedule = [
     {
-      day: "Wednesday, April 23, 2026",
+      day: "Day 1 - Thursday, April 23, 2026",
+      events: [
+        {
+          time: "TBD",
+          title: "Welcome Reception",
+          location: "TBD",
+          type: "Networking",
+        },
+      ],
+    },
+    {
+      day: "Day 2 - Friday, April 24, 2026",
       events: [
         {
           time: "9:00 AM - 9:20 AM",
@@ -85,6 +96,17 @@ export default function ConferenceScheduleSection() {
           title: "Closing Remarks",
           location: "Grand Ballroom",
           type: "Keynote",
+        },
+      ],
+    },
+    {
+      day: "Day 3 - Saturday, April 25, 2026",
+      events: [
+        {
+          time: "TBD",
+          title: "The Impact Gala & Awards",
+          location: "TBD",
+          type: "Gala",
         },
       ],
     },

@@ -8,7 +8,7 @@ import { motion, useInView } from "framer-motion";
 // Leadership Team
 const leadershipTeam = [
   { id: 1, name: "Kenny Okunola", org: "Inaugural Conference Chair", img: "/assets/leadership/ken.webp" },
-  { id: 8, name: "Rachel A. Sachs", org: "2026 Conference Chair", img: "/assets/leadership/rach.webp" },
+  { id: 8, name: "Rachel A. Sachs", org: "2025 Conference Chair", img: "/assets/leadership/rach.webp" },
   { id: 2, name: "Cynthia Okafor", org: "The ITL Network", img: "/assets/leadership/cyn.webp" },
   { id: 4, name: "Michael Tam", org: "ITLNCA NetworkS", img: "/assets/leadership/mike.webp" },
   { id: 5, name: "Ishita Kashyap", org: "Just One Yes (JOY) ITL Initiative", img: "/assets/leadership/ishita.webp" },
@@ -22,7 +22,7 @@ const planningTeam = [
   {
     id: 1,
     name: "Rachel A. Sachs",
-    role: "2026 Conference Chair",
+    role: "2025 Conference Chair",
     image: "/assets/leadership/rach.webp",
   },
   {
@@ -90,6 +90,18 @@ const planningTeam = [
     name: "Laura Olarte",
     role: "Registration Committee",
     image: "/assets/leadership/laura.png",
+  },
+  {
+    id: 13,
+    name: "Katherine Ann Fermo",
+    role: "Gala & Impact Awards Committee Co-Lead",
+    image: "/assets/silho.jpeg",
+  },
+  {
+    id: 14,
+    name: "Lotus Menezes",
+    role: "Gala & Impact Awards Committee Co-Lead",
+    image: "/assets/silho.jpeg",
   },
 ];
 

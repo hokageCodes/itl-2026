@@ -23,7 +23,7 @@ export default function Navbar() {
       items: [
         { label: "Team", href: "/team" },
         { label: "FAQs", href: "/faqs" },
-        { label: "Awards", href: "#awards" },
+        { label: "Awards", href: "/awards" },
       ],
     },
   ];

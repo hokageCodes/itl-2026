@@ -38,9 +38,6 @@ export default function SpeakersSection() {
             </motion.div>
             {/* Decorative element */}
             <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary-600/10 rounded-full blur-2xl -z-10" />
-            <figcaption className="mt-4 text-center text-lg sm:text-xl md:text-2xl font-semibold text-neutral-900">
-              Hon. Justice Imran E. Kamal - Superior Court of Ontario
-            </figcaption>
           </motion.figure>
 
           {/* Right: Content */}
@@ -52,16 +49,20 @@ export default function SpeakersSection() {
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
               Meet Our Keynote Speaker
             </h2>
-            <motion.p
-              className="text-lg text-neutral-700 leading-relaxed mb-8"
+            <motion.div
+              className="text-xl sm:text-2xl md:text-3xl font-semibold text-neutral-900 mb-8"
               initial={{ opacity: 1, y: 0 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Watch out as we unveil our distinguished keynote speaker who will inspire and enlighten attendees with invaluable insights and perspectives on the evolving legal landscape for internationally trained lawyers.
-            </motion.p>
+              Hon. Justice Imran E. Kamal
+              <br />
+              <span className="text-lg sm:text-xl md:text-2xl font-medium text-neutral-700">
+                Superior Court of Ontario
+              </span>
+            </motion.div>
             <motion.a
-              href="#speakers"
+              href="/speakers"
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 px-8 rounded-lg transition shadow-lg text-lg group"
               initial={{ opacity: 1, y: 0 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}

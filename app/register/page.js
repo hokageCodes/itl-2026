@@ -1,9 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { X, Ticket, Calendar, Users } from "lucide-react";
+import { X, Ticket, Calendar, Users, Loader2 } from "lucide-react";
 import { motion, useInView } from "framer-motion";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ticketTypes = [
   {
@@ -48,8 +52,77 @@ const ticketTypes = [
   },
 ];
 
+const canadianProvinces = [
+  "Alberta",
+  "British Columbia",
+  "Manitoba",
+  "New Brunswick",
+  "Newfoundland and Labrador",
+  "Northwest Territories",
+  "Nova Scotia",
+  "Nunavut",
+  "Ontario",
+  "Prince Edward Island",
+  "Quebec",
+  "Saskatchewan",
+  "Yukon",
+];
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name must be less than 100 characters")
+    .required("Name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  phone: Yup.string()
+    .matches(/^[\d\s\-\+\(\)]+$/, "Invalid phone number format")
+    .min(10, "Phone number must be at least 10 digits")
+    .required("Phone number is required"),
+  location: Yup.string()
+    .required("Please select your province/territory"),
+});
+
+const initialValues = {
+  name: "",
+  email: "",
+  phone: "",
+  location: "",
+};
+
 function RegistrationModal({ isOpen, onClose, ticketType, eventType, price }) {
   if (!isOpen) return null;
+
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...values,
+          ticketType: `${ticketType} - ${eventType}`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit registration");
+      }
+
+      toast.success("Registration submitted successfully! We'll be in touch soon.");
+      resetForm();
+      onClose();
+    } catch (error) {
+      console.error("Error submitting registration:", error);
+      toast.error(error.message || "Failed to submit registration. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -59,7 +132,7 @@ function RegistrationModal({ isOpen, onClose, ticketType, eventType, price }) {
         exit={{ opacity: 0, scale: 0.95 }}
         className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
       >
-        <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between z-10">
           <h3 className="text-xl font-bold text-neutral-900">Registration</h3>
           <button
             onClick={onClose}
@@ -70,29 +143,139 @@ function RegistrationModal({ isOpen, onClose, ticketType, eventType, price }) {
           </button>
         </div>
         <div className="p-6">
-          <div className="mb-6">
-            <p className="text-sm text-neutral-600 mb-2">Ticket Type</p>
-            <p className="text-lg font-semibold text-neutral-900">{ticketType}</p>
+          <div className="mb-6 space-y-3">
+            <div>
+              <p className="text-sm text-neutral-600 mb-1">Ticket Type</p>
+              <p className="text-lg font-semibold text-neutral-900">{ticketType}</p>
+            </div>
+            <div>
+              <p className="text-sm text-neutral-600 mb-1">Event</p>
+              <p className="text-lg font-semibold text-neutral-900">{eventType}</p>
+            </div>
+            <div>
+              <p className="text-sm text-neutral-600 mb-1">Price</p>
+              <p className="text-2xl font-bold text-primary-600">${price}</p>
+            </div>
           </div>
-          <div className="mb-6">
-            <p className="text-sm text-neutral-600 mb-2">Event</p>
-            <p className="text-lg font-semibold text-neutral-900">{eventType}</p>
-          </div>
-          <div className="mb-6">
-            <p className="text-sm text-neutral-600 mb-2">Price</p>
-            <p className="text-2xl font-bold text-primary-600">${price}</p>
-          </div>
-          <div className="bg-neutral-50 rounded-lg p-4 mb-6">
-            <p className="text-sm text-neutral-600 text-center">
-              Registration form will be available soon. Please check back later or contact us for more information.
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition"
+
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
           >
-            Close
-          </button>
+            {({ isSubmitting, errors, touched }) => (
+              <Form className="space-y-5">
+                {/* Name */}
+                <div>
+                  <label htmlFor="name" className="block text-sm font-semibold text-neutral-700 mb-2">
+                    Full Name <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="text"
+                    id="name"
+                    name="name"
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition ${
+                      errors.name && touched.name
+                        ? "border-red-500"
+                        : "border-neutral-300"
+                    }`}
+                    placeholder="Enter your full name"
+                  />
+                  <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-neutral-700 mb-2">
+                    Email <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="email"
+                    id="email"
+                    name="email"
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition ${
+                      errors.email && touched.email
+                        ? "border-red-500"
+                        : "border-neutral-300"
+                    }`}
+                    placeholder="Enter your email address"
+                  />
+                  <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-semibold text-neutral-700 mb-2">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition ${
+                      errors.phone && touched.phone
+                        ? "border-red-500"
+                        : "border-neutral-300"
+                    }`}
+                    placeholder="Enter your phone number"
+                  />
+                  <ErrorMessage name="phone" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                {/* Location */}
+                <div>
+                  <label htmlFor="location" className="block text-sm font-semibold text-neutral-700 mb-2">
+                    Province/Territory <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    as="select"
+                    id="location"
+                    name="location"
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition ${
+                      errors.location && touched.location
+                        ? "border-red-500"
+                        : "border-neutral-300"
+                    }`}
+                  >
+                    <option value="">Select your province/territory</option>
+                    {canadianProvinces.map((province) => (
+                      <option key={province} value={province}>
+                        {province}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage name="location" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="flex-1 px-4 py-3 bg-neutral-200 text-neutral-700 font-semibold rounded-lg hover:bg-neutral-300 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`flex-1 px-4 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition flex items-center justify-center gap-2 ${
+                      isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      "Submit Registration"
+                    )}
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </motion.div>
     </div>
@@ -102,7 +285,7 @@ function RegistrationModal({ isOpen, onClose, ticketType, eventType, price }) {
 export default function RegisterPage() {
   const bannerRef = useRef(null);
   const isBannerInView = useInView(bannerRef, { once: false, amount: 0.1, margin: "-100px" });
-
+  const [isMobile, setIsMobile] = useState(false);
   const [modalState, setModalState] = useState({
     isOpen: false,
     ticketType: "",
@@ -110,13 +293,33 @@ export default function RegisterPage() {
     price: 0,
   });
 
-  const openModal = (ticketType, eventType, price) => {
-    setModalState({
-      isOpen: true,
-      ticketType,
-      eventType,
-      price,
-    });
+  // Eventzilla registration link
+  const eventzillaUrl = "https://www.eventzilla.net/e/itl-conference-amp-gala-2026-2138682549";
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handleRegisterClick = (ticketType, eventType, price) => {
+    if (isMobile) {
+      // Open modal on mobile
+      setModalState({
+        isOpen: true,
+        ticketType,
+        eventType,
+        price,
+      });
+    } else {
+      // Open Eventzilla in new tab on desktop
+      window.open(eventzillaUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
   const closeModal = () => {
@@ -233,7 +436,7 @@ export default function RegisterPage() {
                       </div>
                       <button
                         onClick={() =>
-                          openModal(ticket.name, "Conference (Early Bird)", ticket.conference.earlyBird)
+                          handleRegisterClick(ticket.name, "Conference (Early Bird)", ticket.conference.earlyBird)
                         }
                         className="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-2.5 px-4 rounded-md transition text-sm"
                       >
@@ -262,7 +465,7 @@ export default function RegisterPage() {
                       </div>
                       <button
                         onClick={() =>
-                          openModal(ticket.name, "Gala (Early Bird)", ticket.gala.earlyBird)
+                          handleRegisterClick(ticket.name, "Gala (Early Bird)", ticket.gala.earlyBird)
                         }
                         className="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-2.5 px-4 rounded-md transition text-sm"
                       >
@@ -296,7 +499,7 @@ export default function RegisterPage() {
                       </div>
                       <button
                         onClick={() =>
-                          openModal(
+                          handleRegisterClick(
                             ticket.name,
                             "Conference & Gala (Early Bird)",
                             ticket.conferenceGala.earlyBird
@@ -316,13 +519,13 @@ export default function RegisterPage() {
           {/* Note */}
           <div className="mt-12 text-center">
             <p className="text-sm text-neutral-600">
-              * Early bird pricing available for a limited time. Regular pricing applies after the early bird period ends.
+              * The early bird registration period will conclude on February 28, 2026, or upon the full allocation of early bird registrations, whichever occurs first. Regular conference rates will apply following the close of the early bird period.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Registration Modal */}
+      {/* Registration Modal - Only for mobile */}
       <RegistrationModal
         isOpen={modalState.isOpen}
         onClose={closeModal}
@@ -330,6 +533,7 @@ export default function RegisterPage() {
         eventType={modalState.eventType}
         price={modalState.price}
       />
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }

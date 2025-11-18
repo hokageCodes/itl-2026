@@ -42,7 +42,7 @@ export default function FAQsPage() {
     },
     {
       question: "Are there hotel accommodations available for travelling conference attendees?",
-      answer: "We have reserved a block of rooms at The Westin Calgary at a discounted rate of $195.00 per night. To book directly, please call Marriott reservations at 1-888-627-8417 or contact The Westin Calgary Hotel directly at (403) 266-1611. Please use the group name “The ITL Conference” to identify that you are booking for the Conference."
+      answer: "We have reserved a block of rooms at the Marriott Downtown at CF Toronto Eaton Centre at a discounted rate of $299.00 per night. To book directly, please call Marriott reservations at +1 416-597-9200 or contact Marriott Downtown at CF Toronto Eaton Centre directly at (416) 597-9200. Please use the group name “The ITL Conference” to identify that you are booking for the Conference."
     },
     {
       question: "Are there any travel discounts available for travelling conference attendees?",

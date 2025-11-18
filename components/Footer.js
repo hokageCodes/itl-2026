@@ -12,7 +12,7 @@ export default function Footer() {
             <div className="lg:col-span-2">
               <Link href="/" className="inline-block mb-4">
                 <Image
-                  src="/assets/2.png"
+                  src="/assets/itl-logo-nobg.png"
                   alt="ITL Logo"
                   width={120}
                   height={120}
@@ -46,11 +46,6 @@ export default function Footer() {
                 <li>
                   <Link href="#schedule" className="text-neutral-300 hover:text-white transition">
                     Schedule
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#legal" className="text-neutral-300 hover:text-white transition">
-                    Legal
                   </Link>
                 </li>
               </ul>

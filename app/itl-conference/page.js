@@ -126,31 +126,28 @@ function WelcomeSection() {
   return (
     <section className="py-16 sm:py-20 md:py-24 bg-white overflow-hidden" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-
-        {/* GRID: Text Left | Image Center | Text Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 items-start">
-
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* LEFT — TEXT */}
           <motion.div
-            className="space-y-5 order-2 lg:order-1"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
+            className="space-y-6"
+            initial={{ opacity: 0, x: -20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
             transition={{ duration: 0.6 }}
           >
             {/* Quote Icon */}
-            <div className="mb-4">
-              <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 rounded-full">
-                <Quote className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
+            <div className="mb-2">
+              <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-primary-100 rounded-full">
+                <Quote className="w-6 h-6 sm:w-7 sm:h-7 text-primary-600" />
               </div>
             </div>
 
             {/* Title */}
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 leading-tight">
               Welcome to The ITL Conference '26
             </h2>
 
-            {/* LEFT TEXT CONTENT */}
-            <div className="space-y-4 text-neutral-700 text-base sm:text-lg leading-relaxed">
+            {/* All Text Content */}
+            <div className="space-y-4 text-neutral-700 text-sm sm:text-base leading-relaxed">
               <p>
                 When the opportunity arose to take the lead on this conference, I was on the fence.
                 But after considering it, I said yes. No matter where I am in my journey as a lawyer,
@@ -175,47 +172,7 @@ function WelcomeSection() {
                 professional identities, and navigating networks that many Canadian-trained lawyers
                 take for granted.
               </p>
-            </div>
-          </motion.div>
 
-          {/* CENTER — IMAGE */}
-          <motion.div
-            className="relative h-full w-full order-1 lg:order-2 flex flex-col"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="relative w-full h-[350px] sm:h-[450px] lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-              <Image
-                src="/assets/rach.webp"
-                alt="ITL Conference 2026"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 33vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-600/20 via-transparent to-primary-800/20" />
-            </div>
-
-            {/* Decorative blobs */}
-            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-primary-600/10 rounded-full blur-3xl -z-10 hidden md:block pointer-events-none" />
-            <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary-400/10 rounded-full blur-2xl -z-10 hidden md:block pointer-events-none" />
-
-            {/* Signature under image */}
-            <div className="pt-6 mt-4 text-center lg:text-left">
-              <p className="text-lg sm:text-xl font-bold text-neutral-900">Rachel Sachs</p>
-              <p className="text-sm sm:text-base font-semibold text-neutral-700">2026 Conference Chair</p>
-            </div>
-          </motion.div>
-
-          {/* RIGHT — TEXT */}
-          <motion.div
-            className="space-y-5 order-3 lg:order-3"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            {/* RIGHT TEXT CONTENT */}
-            <div className="space-y-4 text-neutral-700 text-base sm:text-lg leading-relaxed">
               <p>
                 We. Take. Risks. ITLs take risks. Leading this conference is an example of one such risk,
                 but I believe that to succeed, we need to support one another, share our experiences
@@ -238,6 +195,31 @@ function WelcomeSection() {
                 this conference will initiate. I look forward to transforming the legal profession
                 beyond the horizon together.
               </p>
+            </div>
+          </motion.div>
+
+          {/* RIGHT — IMAGE */}
+          <motion.div
+            className="relative flex flex-col mt-8 lg:mt-16"
+            initial={{ opacity: 0, x: 20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl overflow-hidden shadow-xl">
+              <Image
+                src="/assets/rach.webp"
+                alt="ITL Conference 2026"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-600/10 via-transparent to-primary-800/10" />
+            </div>
+
+            {/* Signature */}
+            <div className="pt-6 text-center lg:text-left">
+              <p className="text-lg sm:text-xl font-bold text-neutral-900">Rachel A. Sachs</p>
+              <p className="text-sm sm:text-base font-semibold text-neutral-700">2025 Conference Chair</p>
             </div>
           </motion.div>
         </div>

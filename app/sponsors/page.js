@@ -10,12 +10,39 @@ import { useInView } from "framer-motion";
 import { Handshake, Download, FileText, Mail } from "lucide-react";
 import Image from "next/image";
 
+const canadianProvinces = [
+  "Alberta",
+  "British Columbia",
+  "Manitoba",
+  "New Brunswick",
+  "Newfoundland and Labrador",
+  "Northwest Territories",
+  "Nova Scotia",
+  "Nunavut",
+  "Ontario",
+  "Prince Edward Island",
+  "Quebec",
+  "Saskatchewan",
+  "Yukon",
+];
+
+const sponsorshipLevels = [
+  "Title Sponsor",
+  "Platinum Sponsor",
+  "Diamond Sponsor",
+  "Gold Sponsor",
+  "Session Sponsor",
+  "Award Sponsor",
+  "Exhibition Sponsor",
+  "Gala Table Sponsor",
+];
+
 // Yup validation schema
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
+  organizationName: Yup.string()
     .min(2, "Name must be at least 2 characters")
-    .max(100, "Name must be less than 100 characters")
-    .required("Name is required"),
+    .max(200, "Name must be less than 200 characters")
+    .required("Name of Organization / Individual is required"),
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
@@ -23,19 +50,20 @@ const validationSchema = Yup.object().shape({
     .matches(/^[\d\s\-\+\(\)]+$/, "Invalid phone number format")
     .min(10, "Phone number must be at least 10 digits")
     .required("Phone number is required"),
-  company: Yup.string()
-    .min(2, "Company name must be at least 2 characters")
-    .max(200, "Company name must be less than 200 characters")
-    .required("Company/Organization is required"),
+  location: Yup.string()
+    .required("Please select your province/territory"),
+  sponsorshipLevel: Yup.string()
+    .required("Please select a sponsorship level"),
   message: Yup.string()
     .max(1000, "Message must be less than 1000 characters"),
 });
 
 const initialValues = {
-  name: "",
+  organizationName: "",
   email: "",
   phone: "",
-  company: "",
+  location: "",
+  sponsorshipLevel: "",
   message: "",
 };
 
@@ -254,29 +282,29 @@ function SponsorForm() {
     >
       {({ isSubmitting, errors, touched }) => (
         <Form className="space-y-6">
-          {/* Name */}
+          {/* Name of Organization / Individual */}
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-neutral-700 mb-2">
-              Name *
+            <label htmlFor="organizationName" className="block text-sm font-semibold text-neutral-700 mb-2">
+              Name of Organization / Individual <span className="text-red-500">*</span>
             </label>
             <Field
               type="text"
-              id="name"
-              name="name"
+              id="organizationName"
+              name="organizationName"
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition ${
-                errors.name && touched.name
+                errors.organizationName && touched.organizationName
                   ? 'border-red-500'
                   : 'border-neutral-300'
               }`}
-              placeholder="Enter your full name"
+              placeholder="Enter organization or individual name"
             />
-            <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage name="organizationName" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
           {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-semibold text-neutral-700 mb-2">
-              Email *
+              Email Address <span className="text-red-500">*</span>
             </label>
             <Field
               type="email"
@@ -295,7 +323,7 @@ function SponsorForm() {
           {/* Phone */}
           <div>
             <label htmlFor="phone" className="block text-sm font-semibold text-neutral-700 mb-2">
-              Phone *
+              Phone Number <span className="text-red-500">*</span>
             </label>
             <Field
               type="tel"
@@ -311,23 +339,54 @@ function SponsorForm() {
             <ErrorMessage name="phone" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
-          {/* Company */}
+          {/* Location */}
           <div>
-            <label htmlFor="company" className="block text-sm font-semibold text-neutral-700 mb-2">
-              Company/Organization *
+            <label htmlFor="location" className="block text-sm font-semibold text-neutral-700 mb-2">
+              Location <span className="text-red-500">*</span>
             </label>
             <Field
-              type="text"
-              id="company"
-              name="company"
+              as="select"
+              id="location"
+              name="location"
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition ${
-                errors.company && touched.company
+                errors.location && touched.location
                   ? 'border-red-500'
                   : 'border-neutral-300'
               }`}
-              placeholder="Enter your company or organization name"
-            />
-            <ErrorMessage name="company" component="div" className="text-red-500 text-sm mt-1" />
+            >
+              <option value="">Select province or territory</option>
+              {canadianProvinces.map((province) => (
+                <option key={province} value={province}>
+                  {province}
+                </option>
+              ))}
+            </Field>
+            <ErrorMessage name="location" component="div" className="text-red-500 text-sm mt-1" />
+          </div>
+
+          {/* Sponsorship Level */}
+          <div>
+            <label htmlFor="sponsorshipLevel" className="block text-sm font-semibold text-neutral-700 mb-2">
+              Select the level of sponsorship you are interested in <span className="text-red-500">*</span>
+            </label>
+            <Field
+              as="select"
+              id="sponsorshipLevel"
+              name="sponsorshipLevel"
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition ${
+                errors.sponsorshipLevel && touched.sponsorshipLevel
+                  ? 'border-red-500'
+                  : 'border-neutral-300'
+              }`}
+            >
+              <option value="">Select sponsorship level</option>
+              {sponsorshipLevels.map((level) => (
+                <option key={level} value={level}>
+                  {level}
+                </option>
+              ))}
+            </Field>
+            <ErrorMessage name="sponsorshipLevel" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
           {/* Message */}
