@@ -34,18 +34,23 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#team" className="text-neutral-300 hover:text-white transition">
+                  <Link href="/team" className="text-neutral-300 hover:text-white transition">
                     Team
                   </Link>
                 </li>
                 <li>
-                  <Link href="#speakers" className="text-neutral-300 hover:text-white transition">
+                  <Link href="/speakers" className="text-neutral-300 hover:text-white transition">
                     Speakers
                   </Link>
                 </li>
                 <li>
-                  <Link href="#schedule" className="text-neutral-300 hover:text-white transition">
-                    Schedule
+                  <Link href="/awards" className="text-neutral-300 hover:text-white transition">
+                    Awards
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/register" className="text-neutral-300 hover:text-white transition">
+                    Register
                   </Link>
                 </li>
               </ul>

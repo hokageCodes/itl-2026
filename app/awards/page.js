@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { Trophy, Award } from "lucide-react";
+import { Trophy, Award, ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import NominationForm from "@/components/NominationForm";
 import { ToastContainer } from "react-toastify";
@@ -13,61 +13,79 @@ export default function AwardsPage() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.1, margin: "-100px" });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [expandedCards, setExpandedCards] = useState({});
+
+  const toggleCard = (id) => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const awards = [
     {
       id: 1,
-      title: "Diversity Champion",
-      description: "Honoring an individual or organization that has shown outstanding dedication to promoting equity, diversity and inclusion within the legal profession, particularly in supporting internationally trained lawyers. This can also be awarded to a law firm that has demonstrated outstanding commitment to diversity and inclusion, particularly in supporting and advancing the careers of internationally trained lawyers within their organization.",
+      title: "Community Impact Award",
+      shortDescription: "Awarded to an ITL who has demonstrated exceptional dedication to serving and making a positive impact in their local community through advocacy, legal advocacy, pro bono work, or community initiatives.",
+      fullDescription: "Awarded to an ITL who has demonstrated exceptional dedication to serving and making a positive impact in their local community through advocacy, legal advocacy, pro bono work, or community initiatives. This will also be awarded to an ITL who has displayed exemplary advocacy skills and commitment to justice, making a significant impact in advocating for ITLs, their clients and communities",
       icon: "/assets/plaque.png",
+      winner2025: "Foot in the Door Initiative (FIDI)",
     },
     {
       id: 2,
-      title: "Community Impact Award",
-      description: "Awarded to an ITL who has demonstrated exceptional dedication to serving and making a positive impact in their local community through advocacy, legal advocacy, pro bono work, or community initiatives. This will also be awarded to an ITL who has displayed exemplary advocacy skills and commitment to justice, making a significant impact in advocating for ITLs, their clients and communities",
+      title: "Leadership in Legal Education Award",
+      shortDescription: "Honoring an individual or institution that has shown outstanding leadership and innovation in providing educational support and resources for internationally trained lawyers.",
+      fullDescription: "Honoring an individual or institution that has shown outstanding leadership and innovation in providing educational support and resources for internationally trained lawyers to integrate into the Canadian legal profession. This can also be awarded to an ITL who has made exceptional contributions to legal scholarship through their research, publications, and academic endeavors within the Canadian legal education system.",
       icon: "/assets/plaque.png",
+      winner2025: "Gina Alexandris",
     },
     {
       id: 3,
-      title: "Leadership in Legal Education Award",
-      description: "Honoring an individual or institution that has shown outstanding leadership and innovation in providing educational support and resources for internationally trained lawyers to integrate into the Canadian legal profession. This can also be awarded to an ITL who has made exceptional contributions to legal scholarship through their research, publications, and academic endeavors within the Canadian legal education system.",
+      title: "Trailblazer in Technology Award",
+      shortDescription: "Recognizing an ITL who has leveraged technology and innovation to advance the practice of law, improve access to justice, or enhance legal services delivery in Canada.",
+      fullDescription: "Recognizing an ITL who has leveraged technology and innovation to advance the practice of law, improve access to justice, or enhance legal services delivery in Canada. This also includes groundbreaking legal solutions developed or implemented by an internationally trained lawyer or legal team to address complex challenges in the Canadian legal landscape.",
       icon: "/assets/plaque.png",
+      winner2025: "Gideon Christian",
     },
     {
       id: 4,
-      title: "Trailblazer in Technology Award",
-      description: "Recognizing an ITL who has leveraged technology and innovation to advance the practice of law, improve access to justice, or enhance legal services delivery in Canada. This also includes groundbreaking legal solutions developed or implemented by an internationally trained lawyer or legal team to address complex challenges in the Canadian legal landscape.",
+      title: "Rising Star Award",
+      shortDescription: "The Rising Star Award honors a young ITL who has demonstrated outstanding potential, leadership, legal excellence, and a commitment to justice.",
+      fullDescription: "The Rising Star Award honors a young ITL who has demonstrated outstanding potential, leadership, legal excellence, and a commitment to justice. This individual is poised to make a significant impact and is seen as a future leader within the Canadian legal community.",
       icon: "/assets/plaque.png",
+      winner2025: "Ilse Torres Quezada",
+    },
+    {
+      id: 5,
+      title: "Mentorship Excellence Award",
+      shortDescription: "Presented to a law firm, individual or organization that has excelled in providing mentorship programs and opportunities for internationally trained lawyers.",
+      fullDescription: "Presented to a law firm, individual or organization that has excelled in providing mentorship programs and opportunities for internationally trained lawyers to enhance their professional development and integration into the Canadian legal profession.",
+      icon: "/assets/plaque.png",
+      winner2025: "Sara Bond",
     },
     {
       id: 6,
-      title: "Rising Star Award",
-      description: "The Rising Star Award honors a young ITL who has demonstrated outstanding potential, leadership, legal excellence, and a commitment to justice. This individual is poised to make a significant impact and is seen as a future leader within the Canadian legal community.",
+      title: "Innovative Recruitment Award",
+      shortDescription: "Awarded to a law firm that has implemented innovative and effective strategies to recruit, retain, and support internationally trained lawyers within their organization.",
+      fullDescription: "Awarded to a law firm that has implemented innovative and effective strategies to recruit, retain, and support internationally trained lawyers within their organization, fostering diversity and talent acquisition.",
       icon: "/assets/plaque.png",
+      winner2025: "Osuji & Smith Lawyers",
     },
     {
       id: 7,
-      title: "Mentorship Excellence Award",
-      description: "Presented to a law firm, individual or organization that has excelled in providing mentorship programs and opportunities for internationally trained lawyers to enhance their professional development and integration into the Canadian legal profession.",
+      title: "Entrepreneurial Excellence Award",
+      shortDescription: "This award honors an ITL who has demonstrated exceptional entrepreneurial spirit, innovation, and leadership in the business sector.",
+      fullDescription: "This award honors an ITL who has demonstrated exceptional entrepreneurial spirit, innovation, and leadership in the business sector. Whether through founding a startup, leading a successful business venture, or driving innovation within an established company, this individual exemplifies excellence in business acumen, strategic thinking, and transformative leadership.",
       icon: "/assets/plaque.png",
+      winner2025: "Douglas Zorry",
     },
     {
       id: 8,
-      title: "Innovative Recruitment Award",
-      description: "Awarded to a law firm that has implemented innovative and effective strategies to recruit, retain, and support internationally trained lawyers within their organization, fostering diversity and talent acquisition.",
-      icon: "/assets/plaque.png",
-    },
-    {
-      id: 9,
-      title: "Entrepreneurial Excellence Award",
-      description: "This award honors an ITL who has demonstrated exceptional entrepreneurial spirit, innovation, and leadership in the business sector. Whether through founding a startup, leading a successful business venture, or driving innovation within an established company, this individual exemplifies excellence in business acumen, strategic thinking, and transformative leadership.",
-      icon: "/assets/plaque.png",
-    },
-    {
-      id: 10,
       title: "The Nobel Award",
-      description: "This flagship award of the year recognizes an outstanding ITL who has demonstrated exceptional legal skills, consistently provides outstanding legal services, and is highly respected by peers and the broader Canadian legal community. The recipient exemplifies the qualities of a model ITL, excelling both in the practice of law and in their professional contributions. In addition, this ITL has shown exemplary leadership, advocacy, and dedication to advancing the interests and rights of internationally trained lawyers within the Canadian legal profession. They are celebrated for their exceptional mentorship and for being a respected and exemplary figure in the Canadian legal community",
+      shortDescription: "This flagship award of the year recognizes an outstanding ITL who has demonstrated exceptional legal skills and consistently provides outstanding legal services.",
+      fullDescription: "This flagship award of the year recognizes an outstanding ITL who has demonstrated exceptional legal skills, consistently provides outstanding legal services, and is highly respected by peers and the broader Canadian legal community. The recipient exemplifies the qualities of a model ITL, excelling both in the practice of law and in their professional contributions. In addition, this ITL has shown exemplary leadership, advocacy, and dedication to advancing the interests and rights of internationally trained lawyers within the Canadian legal profession. They are celebrated for their exceptional mentorship and for being a respected and exemplary figure in the Canadian legal community",
       icon: "/assets/plaque.png",
+      winner2025: "Kene Ilochonwu",
     },
   ];
 
@@ -143,7 +161,7 @@ export default function AwardsPage() {
 
               <div className="bg-primary-50 border-l-4 border-primary-600 p-6 rounded-lg mt-8">
                 <p className="text-neutral-800 leading-relaxed">
-                  <strong>Please note that the deadline for nominations was February 28, 2026.</strong> We are currently reviewing all submissions with our selection committee, and once the review process is complete, we will reach out to the final nominees directly.
+                Please note that the deadline to submit nominations is <strong>February 28, 2026</strong>. After that date, our selection committee will review all submissions, and we will contact the selected nominees directly.
                 </p>
               </div>
             </div>
@@ -155,39 +173,81 @@ export default function AwardsPage() {
                 Award Categories
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
-                {awards.map((award, index) => (
-                  <motion.div
-                    key={award.id}
-                    className="group relative bg-white rounded-2xl overflow-hidden border border-neutral-200 hover:border-primary-300 transition-all duration-300 shadow-md hover:shadow-2xl"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                    transition={{ duration: 0.5, delay: index * 0.08 }}
-                    whileHover={{ y: -5 }}
-                  >
-                    {/* Top Accent Bar */}
-                    <div className="h-1.5 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600"></div>
-                    
-                    <div className="p-6 sm:p-8">
-                      {/* Icon and Title */}
-                      <div className="flex items-center gap-4 mb-5">
-                        <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-50 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-300">
-                          <Trophy className="w-8 h-8 text-primary-600" />
+                {awards.map((award, index) => {
+                  const isExpanded = expandedCards[award.id];
+                  const showReadMore = award.shortDescription !== award.fullDescription;
+                  
+                  return (
+                    <motion.div
+                      key={award.id}
+                      className="group relative bg-white rounded-2xl overflow-hidden border border-neutral-200 hover:border-primary-300 transition-all duration-300 shadow-md hover:shadow-2xl flex flex-col"
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                      transition={{ duration: 0.5, delay: index * 0.08 }}
+                      whileHover={{ y: -5 }}
+                    >
+                      {/* Top Accent Bar */}
+                      <div className="h-1.5 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600"></div>
+                      
+                      <div className="p-6 sm:p-8 flex-1 flex flex-col">
+                        {/* Icon and Title */}
+                        <div className="flex items-center gap-4 mb-5">
+                          <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-50 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-300">
+                            <Trophy className="w-8 h-8 text-primary-600" />
+                          </div>
+                          <h4 className="text-lg sm:text-xl font-bold text-neutral-900 leading-tight flex-1">
+                            {award.title}
+                          </h4>
                         </div>
-                        <h4 className="text-lg sm:text-xl font-bold text-neutral-900 leading-tight flex-1">
-                          {award.title}
-                        </h4>
+                        
+                        {/* Description */}
+                        <div className="flex-1">
+                          <p className="text-neutral-600 leading-relaxed text-sm sm:text-base">
+                            {isExpanded ? award.fullDescription : award.shortDescription}
+                          </p>
+                          
+                          {/* Read More/Less Button */}
+                          {showReadMore && (
+                            <button
+                              onClick={() => toggleCard(award.id)}
+                              className="mt-3 text-primary-600 hover:text-primary-700 font-semibold text-sm flex items-center gap-1 transition-colors"
+                            >
+                              {isExpanded ? (
+                                <>
+                                  <span>Read Less</span>
+                                  <ChevronUp className="w-4 h-4" />
+                                </>
+                              ) : (
+                                <>
+                                  <span>Read More</span>
+                                  <ChevronDown className="w-4 h-4" />
+                                </>
+                              )}
+                            </button>
+                          )}
+                        </div>
                       </div>
                       
-                      {/* Description */}
-                      <p className="text-neutral-600 leading-relaxed text-sm sm:text-base">
-                        {award.description}
-                      </p>
-                    </div>
-                    
-                    {/* Decorative bottom accent */}
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </motion.div>
-                ))}
+                      {/* Winners Section */}
+                      {award.winner2025 && (
+                        <div className="border-t border-neutral-200 bg-gradient-to-br from-primary-50 to-primary-100/50 px-6 sm:px-8 py-5">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Trophy className="w-5 h-5 text-primary-600" />
+                            <span className="text-xs sm:text-sm font-semibold text-primary-700 uppercase tracking-wide">
+                              2025 Winner
+                            </span>
+                          </div>
+                          <p className="text-base sm:text-lg font-bold text-neutral-900">
+                            {award.winner2025}
+                          </p>
+                        </div>
+                      )}
+                      
+                      {/* Decorative bottom accent */}
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </div>
 
