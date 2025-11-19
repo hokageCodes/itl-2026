@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageLoader from "@/components/PageLoader";
 
 export const metadata = {
   title: "ITL Conference '26 | From Hurdles to Horizons: The Evolving ITL Landscape",
@@ -76,9 +77,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
-        <Footer />
+        <PageLoader>
+          <Navbar />
+          {children}
+          <Footer />
+        </PageLoader>
       </body>
     </html>
   );
