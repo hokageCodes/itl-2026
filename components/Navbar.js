@@ -141,7 +141,7 @@ export default function Navbar() {
           <div className="lg:hidden pb-6 border-t border-neutral-200">
             <div className="py-3 px-2">
               <a
-                href="#conference"
+                href="/itl-conference"
                 className="block px-4 py-3 text-lg font-bold text-neutral-700 hover:bg-primary-50 rounded-md transition"
                 onClick={() => setMobileMenuOpen(false)}
               >

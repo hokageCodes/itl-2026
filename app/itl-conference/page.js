@@ -219,7 +219,7 @@ function WelcomeSection() {
             {/* Signature */}
             <div className="pt-6 text-center lg:text-left">
               <p className="text-lg sm:text-xl font-bold text-neutral-900">Rachel A. Sachs</p>
-              <p className="text-sm sm:text-base font-semibold text-neutral-700">2025 Conference Chair</p>
+              <p className="text-sm sm:text-base font-semibold text-neutral-700">2026 Conference Chair</p>
             </div>
           </motion.div>
         </div>

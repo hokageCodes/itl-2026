@@ -75,13 +75,13 @@ const Hero = () => {
           {/* Buttons Container */}
           <div className="flex flex-col w-full sm:flex-row sm:justify-center md:justify-start items-center gap-4 sm:gap-4 md:gap-0 mt-2 sm:mt-4 md:mt-6">
             <a
-              href="/registration"
+              href="/register"
               className="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 px-8 sm:py-3 sm:px-6 text-base sm:text-base rounded-lg transition-colors duration-300 w-full sm:w-auto text-center md:my-0 md:mx-2"
             >
               Register Now
             </a>
             <a
-              href="/our-sponsors"
+              href="/sponsors"
               className="border-2 border-white text-white hover:bg-white/10 font-bold py-3.5 px-8 sm:py-3 sm:px-6 text-base sm:text-base rounded-lg transition-colors duration-300 w-full sm:w-auto text-center md:my-0 md:mx-2"
             >
               Become a Sponsor

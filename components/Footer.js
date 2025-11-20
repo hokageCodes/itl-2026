@@ -34,8 +34,13 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/team" className="text-neutral-300 hover:text-white transition">
-                    Team
+                  <Link href="/itl-conference" className="text-neutral-300 hover:text-white transition">
+                    ITL Conference
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/register" className="text-neutral-300 hover:text-white transition">
+                    Register
                   </Link>
                 </li>
                 <li>
@@ -44,13 +49,28 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/sponsors" className="text-neutral-300 hover:text-white transition">
+                    Sponsors
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/team" className="text-neutral-300 hover:text-white transition">
+                    Team
+                  </Link>
+                </li>
+                <li>
                   <Link href="/awards" className="text-neutral-300 hover:text-white transition">
                     Awards
                   </Link>
                 </li>
                 <li>
-                  <Link href="/register" className="text-neutral-300 hover:text-white transition">
-                    Register
+                  <Link href="/faqs" className="text-neutral-300 hover:text-white transition">
+                    FAQs
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/volunteer" className="text-neutral-300 hover:text-white transition">
+                    Volunteer
                   </Link>
                 </li>
               </ul>
