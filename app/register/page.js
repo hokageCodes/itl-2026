@@ -28,7 +28,7 @@ const ticketTypes = [
   },
   {
     id: "government",
-    name: "Government / Non-for-Profit / Sole Practitioner",
+    name: "Government / Not-for-Profit / Sole Practitioner",
     icon: "🏛️",
     conference: { regular: 190, earlyBird: 170 },
     gala: { regular: 215, earlyBird: 160 },
@@ -44,7 +44,7 @@ const ticketTypes = [
   },
   {
     id: "nonlawyer",
-    name: "Non-lawyer",
+    name: "Non-Lawyer",
     icon: "👤",
     conference: { regular: 300, earlyBird: 270 },
     gala: { regular: 300, earlyBird: 270 },

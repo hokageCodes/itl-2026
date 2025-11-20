@@ -13,16 +13,16 @@ export default function ITLConferencePage() {
   // 3 slides for the carousel
   const slides = [
     {
+      image: "/assets/itl-26.png",
+      alt: "ITL Conference Slide 3"
+    },
+    {
       image: "/assets/itl-26-1.webp",
       alt: "ITL Conference Slide 1"
     },
     {
       image: "/assets/itl-26-2.png",
       alt: "ITL Conference Slide 2"
-    },
-    {
-      image: "/assets/itl-26.png",
-      alt: "ITL Conference Slide 3"
     },
   ];
 

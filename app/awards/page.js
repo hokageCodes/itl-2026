@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { useState } from "react";
 import { Trophy, Award, ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import NominationForm from "@/components/NominationForm";
@@ -10,8 +8,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function AwardsPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.1, margin: "-100px" });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
 
@@ -95,7 +91,7 @@ export default function AwardsPage() {
       <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden">
         <div className="relative w-full h-full">
           <Image
-            src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&q=80"
+            src="/assets/itl-26-1.webp"
             alt="ITL Conference Awards"
             fill
             className="object-cover"
@@ -103,48 +99,13 @@ export default function AwardsPage() {
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-black/20" />
-          
-          {/* Banner Content */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-              <motion.div
-                className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100/20 backdrop-blur-sm rounded-full mb-6 sm:mb-8"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-              >
-                <Trophy className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
-              </motion.div>
-              <motion.h1
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                Awards
-              </motion.h1>
-              <motion.p
-                className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-2xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                Recognizing excellence in the ITL community
-              </motion.p>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* Awards Content Section */}
-      <section className="py-16 sm:py-20 md:py-24 bg-white" ref={ref}>
+      <section className="py-16 sm:py-20 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="max-w-none"
-            initial={{ opacity: 1, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div className="max-w-none">
             <div className="max-w-4xl mx-auto mb-12 sm:mb-16">
               <h2 className="text-3xl text-center sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-6 sm:mb-8">
                 The ITL Conference '26 Awards
@@ -178,13 +139,9 @@ export default function AwardsPage() {
                   const showReadMore = award.shortDescription !== award.fullDescription;
                   
                   return (
-                    <motion.div
+                    <div
                       key={award.id}
-                      className="group relative bg-white rounded-2xl overflow-hidden border border-neutral-200 hover:border-primary-300 transition-all duration-300 shadow-md hover:shadow-2xl flex flex-col"
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                      transition={{ duration: 0.5, delay: index * 0.08 }}
-                      whileHover={{ y: -5 }}
+                      className="group relative bg-white rounded-2xl overflow-hidden border border-neutral-200 hover:border-primary-300 transition-all duration-300 shadow-md hover:shadow-2xl flex flex-col hover:-translate-y-1"
                     >
                       {/* Top Accent Bar */}
                       <div className="h-1.5 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600"></div>
@@ -245,7 +202,7 @@ export default function AwardsPage() {
                       
                       {/* Decorative bottom accent */}
                       <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
@@ -253,18 +210,13 @@ export default function AwardsPage() {
 
             {/* Nominate CTA */}
             <div className="mt-16 sm:mt-20 text-center">
-              <motion.button
+              <button
                 onClick={() => setIsModalOpen(true)}
-                className="inline-flex items-center gap-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 px-8 sm:py-5 sm:px-10 rounded-lg transition shadow-lg text-base sm:text-lg group"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 px-8 sm:py-5 sm:px-10 rounded-lg transition shadow-lg text-base sm:text-lg group hover:scale-105 active:scale-95"
               >
                 <Award className="w-5 h-5 sm:w-6 sm:h-6" />
                 Click Here to Nominate
-              </motion.button>
+              </button>
             </div>
 
             {/* Award Selection Committee Section */}
@@ -337,7 +289,7 @@ export default function AwardsPage() {
                 </div>
               </div> */}
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 

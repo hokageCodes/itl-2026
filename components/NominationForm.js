@@ -33,7 +33,6 @@ const formSteps = [
 ];
 
 const nominationCategories = [
-  "Diversity Champion",
   "Community Impact Award",
   "Leadership in Legal Education Award",
   "Trailblazer in Technology Award",
