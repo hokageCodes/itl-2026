@@ -1,32 +1,147 @@
 "use client";
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { LayoutDashboard, FileText, ChevronDown, ChevronRight, UserPlus, HandHeart, Building2, Award, X } from 'lucide-react';
 
-export default function Sidebar() {
-  const [open, setOpen] = useState(false);
+export default function Sidebar({ isOpen, onClose }) {
+  const pathname = usePathname();
+  const [submissionsOpen, setSubmissionsOpen] = useState(
+    pathname?.startsWith('/admin/submissions') || false
+  );
+
+  const isActive = (path) => pathname === path;
+  const isSubmissionsActive = pathname?.startsWith('/admin/submissions');
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    if (isOpen && typeof window !== 'undefined' && window.innerWidth < 768) {
+      onClose?.();
+    }
+  }, [pathname]);
+
   return (
-    <aside className="bg-white border-r w-64 hidden md:block">
-      <div className="h-full flex flex-col">
-        <div className="p-4 font-bold text-xl">Admin</div>
-        <nav className="flex-1 px-2 space-y-1">
-          <Link href="/admin" className="block px-3 py-2 rounded hover:bg-gray-100">Dashboard</Link>
-          <Link href="/admin/content" className="block px-3 py-2 rounded hover:bg-gray-100">Content</Link>
-          <Link href="/admin/media" className="block px-3 py-2 rounded hover:bg-gray-100">Media</Link>
-          <Link href="/admin/settings" className="block px-3 py-2 rounded hover:bg-gray-100">Settings</Link>
-        </nav>
-        <div className="p-4">
-          <button
-            onClick={async () => {
-              await fetch('/api/auth/logout', { method: 'POST' });
-              window.location.href = '/admin/login';
-            }}
-            className="text-sm text-red-600"
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed md:static inset-y-0 left-0 z-50 bg-white border-r border-neutral-200 w-64 min-h-screen flex flex-col transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Logo/Brand */}
+          <div className="p-6 border-b border-neutral-200 flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold text-neutral-900">Admin Panel</h1>
+              <p className="text-sm text-neutral-500 mt-1">ITL Conference</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="md:hidden p-2 hover:bg-neutral-100 rounded-lg"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5 text-neutral-600" />
+            </button>
+          </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+          {/* Overview */}
+          <Link
+            href="/admin"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+              isActive('/admin')
+                ? 'bg-primary-50 text-primary-700 font-semibold'
+                : 'text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900'
+            }`}
           >
-            Sign out
-          </button>
-        </div>
+            <LayoutDashboard className="w-5 h-5" />
+            <span>Overview</span>
+          </Link>
+
+          {/* Submissions Dropdown */}
+          <div>
+            <button
+              onClick={() => setSubmissionsOpen(!submissionsOpen)}
+              className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-colors ${
+                isSubmissionsActive
+                  ? 'bg-primary-50 text-primary-700 font-semibold'
+                  : 'text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <FileText className="w-5 h-5" />
+                <span>Submissions</span>
+              </div>
+              {submissionsOpen ? (
+                <ChevronDown className="w-4 h-4" />
+              ) : (
+                <ChevronRight className="w-4 h-4" />
+              )}
+            </button>
+
+            {/* Dropdown Menu */}
+            {submissionsOpen && (
+              <div className="ml-4 mt-1 space-y-1 border-l border-neutral-200 pl-4">
+                <Link
+                  href="/admin/submissions/registrations"
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-sm ${
+                    isActive('/admin/submissions/registrations')
+                      ? 'bg-primary-50 text-primary-700 font-semibold'
+                      : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                  }`}
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>Registrations</span>
+                </Link>
+                <Link
+                  href="/admin/submissions/volunteers"
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-sm ${
+                    isActive('/admin/submissions/volunteers')
+                      ? 'bg-primary-50 text-primary-700 font-semibold'
+                      : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                  }`}
+                >
+                  <HandHeart className="w-4 h-4" />
+                  <span>Volunteers</span>
+                </Link>
+                <Link
+                  href="/admin/submissions/sponsors"
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-sm ${
+                    isActive('/admin/submissions/sponsors')
+                      ? 'bg-primary-50 text-primary-700 font-semibold'
+                      : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                  }`}
+                >
+                  <Building2 className="w-4 h-4" />
+                  <span>Sponsors</span>
+                </Link>
+                <Link
+                  href="/admin/submissions/nominations"
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-sm ${
+                    isActive('/admin/submissions/nominations')
+                      ? 'bg-primary-50 text-primary-700 font-semibold'
+                      : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                  }`}
+                >
+                  <Award className="w-4 h-4" />
+                  <span>Nominations</span>
+                </Link>
+              </div>
+            )}
+          </div>
+        </nav>
       </div>
     </aside>
+    </>
   );
 }
