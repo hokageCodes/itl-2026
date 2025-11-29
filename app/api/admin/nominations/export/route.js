@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { verifyToken } from '@/lib/auth';
 import { ObjectId } from 'mongodb';
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 
 function parseCookie(header) {
   if (!header) return null;
