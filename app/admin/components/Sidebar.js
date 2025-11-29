@@ -38,20 +38,6 @@ export default function Sidebar({ isOpen, onClose }) {
         }`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo/Brand */}
-          <div className="p-6 border-b border-neutral-200 flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-bold text-neutral-900">Admin Panel</h1>
-              <p className="text-sm text-neutral-500 mt-1">ITL Conference</p>
-            </div>
-            <button
-              onClick={onClose}
-              className="md:hidden p-2 hover:bg-neutral-100 rounded-lg"
-              aria-label="Close menu"
-            >
-              <X className="w-5 h-5 text-neutral-600" />
-            </button>
-          </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
