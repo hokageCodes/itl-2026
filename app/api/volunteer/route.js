@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 
+// COMMENTED OUT: Volunteer functionality disabled
 export async function POST(req) {
+  return NextResponse.json(
+    { error: 'Volunteer applications are currently disabled.' },
+    { status: 503 }
+  );
+  
+  /* COMMENTED OUT - Original functionality
   try {
     const body = await req.json();
     const { name, email, phone, location, committee } = body;
@@ -64,5 +71,6 @@ export async function POST(req) {
       { status: 500 }
     );
   }
+  */
 }
 

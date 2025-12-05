@@ -60,7 +60,20 @@ const initialValues = {
 };
 
 export default function VolunteerPage() {
+  // COMMENTED OUT: Volunteer form submission disabled
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    toast.error('Volunteer applications are currently disabled.', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+    setSubmitting(false);
+    return;
+    
+    /* COMMENTED OUT - Original functionality
     try {
       const response = await fetch('/api/volunteer', {
         method: 'POST',
@@ -104,6 +117,7 @@ export default function VolunteerPage() {
     } finally {
       setSubmitting(false);
     }
+    */
   };
 
   return (
