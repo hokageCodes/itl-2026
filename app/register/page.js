@@ -94,7 +94,23 @@ const initialValues = {
 function RegistrationModal({ isOpen, onClose, ticketType, eventType, price }) {
   if (!isOpen) return null;
 
+  // COMMENTED OUT: Form submission disabled - using Eventzilla for all registrations
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    toast.error("Please register through Eventzilla. The registration form is disabled.", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+    // Open Eventzilla link
+    window.open("https://www.eventzilla.net/e/itl-conference-amp-gala-2026-2138682549", "_blank", "noopener,noreferrer");
+    setSubmitting(false);
+    onClose();
+    return;
+    
+    /* COMMENTED OUT - Original form submission functionality
     try {
       const response = await fetch("/api/register", {
         method: "POST",
@@ -122,6 +138,7 @@ function RegistrationModal({ isOpen, onClose, ticketType, eventType, price }) {
     } finally {
       setSubmitting(false);
     }
+    */
   };
 
   return (
@@ -308,6 +325,11 @@ export default function RegisterPage() {
   }, []);
 
   const handleRegisterClick = (ticketType, eventType, price) => {
+    // COMMENTED OUT: Mobile modal disabled - all registrations go through Eventzilla
+    // Always open Eventzilla (both mobile and desktop)
+    window.open(eventzillaUrl, "_blank", "noopener,noreferrer");
+    
+    /* COMMENTED OUT - Original mobile modal functionality
     if (isMobile) {
       // Open modal on mobile
       setModalState({
@@ -320,6 +342,7 @@ export default function RegisterPage() {
       // Open Eventzilla in new tab on desktop
       window.open(eventzillaUrl, "_blank", "noopener,noreferrer");
     }
+    */
   };
 
   const closeModal = () => {

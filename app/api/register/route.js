@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 
+// COMMENTED OUT: Registration API disabled - using Eventzilla for all registrations
 export async function POST(request) {
+  return NextResponse.json(
+    { error: 'Registration is now handled through Eventzilla. Please use the Eventzilla link to register.' },
+    { status: 503 }
+  );
+  
+  /* COMMENTED OUT - Original functionality
   try {
     const body = await request.json();
     const { name, email, phone, location, ticketType } = body;
@@ -60,4 +67,5 @@ export async function POST(request) {
       { status: 500 }
     );
   }
+  */
 }
