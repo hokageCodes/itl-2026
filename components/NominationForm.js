@@ -129,7 +129,13 @@ export default function NominationForm({ isOpen, onClose }) {
         body: formData,
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        // If response is not JSON, create a generic error
+        throw new Error(`Server error (${response.status}). Please try again.`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to submit nomination");

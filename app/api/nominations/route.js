@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import cloudinary from '@/lib/cloudinary';
 
+export const runtime = 'nodejs';
+export const maxDuration = 30;
+
 export async function POST(req) {
   try {
     const formData = await req.formData();
@@ -43,6 +46,12 @@ export async function POST(req) {
     }
 
     const client = await clientPromise.conn;
+    if (!client) {
+      return NextResponse.json(
+        { error: 'Database connection failed' },
+        { status: 500 }
+      );
+    }
     const db = client.db('itl-conference');
 
     // Handle file upload if present
@@ -63,39 +72,78 @@ export async function POST(req) {
           );
         }
 
+        // Validate file type by extension (more reliable than MIME type)
+        const fileNameLower = supportingDocument.name.toLowerCase();
+        const validExtensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+        const hasValidExtension = validExtensions.some(ext => fileNameLower.endsWith(ext));
+        if (!hasValidExtension) {
+          return NextResponse.json(
+            { error: 'Invalid file type. Please upload PDF, DOC, DOCX, JPG, or PNG files only.' },
+            { status: 400 }
+          );
+        }
+
         fileName = supportingDocument.name;
         fileSize = supportingDocument.size;
         fileType = supportingDocument.type || 'application/octet-stream';
+
+        // Check Cloudinary configuration
+        if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+          console.error('Cloudinary configuration missing');
+          return NextResponse.json(
+            { error: 'File upload service is not configured. Please contact support.' },
+            { status: 500 }
+          );
+        }
 
         // Convert File to Buffer
         const arrayBuffer = await supportingDocument.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         
-        // Upload to Cloudinary
-        const uploadResult = await new Promise((resolve, reject) => {
-          const uploadStream = cloudinary.uploader.upload_stream(
-            {
-              resource_type: 'auto', // Automatically detect file type
-              folder: 'itl-conference/nominations',
-              use_filename: true,
-              unique_filename: true,
-              overwrite: false,
-            },
-            (error, result) => {
-              if (error) reject(error);
-              else resolve(result);
+        // Upload to Cloudinary with timeout
+        const uploadResult = await Promise.race([
+          new Promise((resolve, reject) => {
+            try {
+              const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                  resource_type: 'auto', // Automatically detect file type
+                  folder: 'itl-conference/nominations',
+                  use_filename: true,
+                  unique_filename: true,
+                  overwrite: false,
+                },
+                (error, result) => {
+                  if (error) {
+                    console.error('Cloudinary upload error:', error);
+                    reject(new Error(error.message || 'Failed to upload file to cloud storage'));
+                  } else {
+                    resolve(result);
+                  }
+                }
+              );
+              
+              uploadStream.end(buffer);
+            } catch (streamError) {
+              console.error('Stream creation error:', streamError);
+              reject(new Error('Failed to create upload stream'));
             }
-          );
-          
-          uploadStream.end(buffer);
-        });
+          }),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Upload timeout - file is too large or connection is slow')), 25000)
+          )
+        ]);
+
+        if (!uploadResult || !uploadResult.secure_url) {
+          throw new Error('Upload completed but no URL was returned');
+        }
 
         fileUrl = uploadResult.secure_url;
         filePublicId = uploadResult.public_id;
       } catch (fileError) {
         console.error('File upload error:', fileError);
+        const errorMessage = fileError.message || 'Failed to upload file. Please try again.';
         return NextResponse.json(
-          { error: 'Failed to upload file. Please try again.' },
+          { error: errorMessage },
           { status: 500 }
         );
       }
@@ -147,8 +195,23 @@ export async function POST(req) {
     );
   } catch (err) {
     console.error('Nomination submission error:', err);
+    
+    // Provide more specific error messages
+    let errorMessage = 'Server error. Please try again later.';
+    if (err.message) {
+      if (err.message.includes('timeout')) {
+        errorMessage = 'Upload timeout. Please try with a smaller file or check your connection.';
+      } else if (err.message.includes('Cloudinary') || err.message.includes('cloud')) {
+        errorMessage = 'File upload service error. Please try again or contact support.';
+      } else if (err.message.includes('MongoDB') || err.message.includes('database')) {
+        errorMessage = 'Database error. Please try again later.';
+      } else {
+        errorMessage = err.message;
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Server error. Please try again later.' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
